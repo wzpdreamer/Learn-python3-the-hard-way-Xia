@@ -8,10 +8,10 @@ lexicon = {'north': ('direction', 'north'), 'south': ('direction', 'south'), 'ea
     'bear': ('noun', 'bear'), 'princess': ('noun', 'princess'), }
 
 
-def isnum(Num):
+def convert_number(s):
     try:
-        return int(Num)
-    except:
+        return int(s)
+    except ValueError:
         return None
 
 
@@ -20,7 +20,7 @@ def scan(sentence):
     result = []
 
     for word in words:
-        if isnum(word):
+        if convert_number(word):
             result.append(('number', int(word)))
         elif word in lexicon.keys():
             result.append(lexicon[word])
