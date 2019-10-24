@@ -47,20 +47,19 @@ def parse_object(word_list):
     else:
         raise ParserError("Excepted a noun or direction next.")
 
-def parse_subject(word_list):
-    skip(word_list, 'stop')
-    next_word = peek(word_list)
-    if next_word == 'noun':
-        return match(word_list, 'noun')
-    elif next_word == 'verb':
-        return match('noun', 'player')
-    else:
-        raise ParserError("Expected a verb next.")
-
-def parse_sentence(word_list):
-    subj = parse_subject(word_list)
+def parse_subject(word_list, subj):
     verb = parse_verb(word_list)
     obj = parse_object(word_list)
 
-    return Sentence(subj, verb, obj)
+    return Sentence()
+def parse_sentence(word_list):
+    skip(word_list, 'stop')
+    start = peek(word_list)
+    if start == 'noun':
+        subj = match(word_list, 'noun')
+        return parse_subject(word_list, subj)
+    elif start == 'verb':   # assume the subject is the player then
+        return parse_subject(word_list, ('noun', 'player'))
+    else:
+        raise ParserError("Must start with subject, object, or verb not: %s" % start)
 
